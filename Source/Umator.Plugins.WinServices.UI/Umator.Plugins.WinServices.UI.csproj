@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <SignAssembly>true</SignAssembly>
+
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NLog" Version="4.7.6">
+      <IncludeAssets>all</IncludeAssets>
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Umator.Plugins.WinServices.Components\Umator.Plugins.WinServices.Components.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.Xaml.Behaviors">
+      <HintPath>..\..\..\..\..\Libs\NuGet\microsoft.xaml.behaviors.wpf\1.1.19\lib\netcoreapp3.0\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
+    <Reference Include="Umator.Contract">
+      <HintPath>..\..\Libs\Shared\Umator.Contract.dll</HintPath>
+    </Reference>
+    <Reference Include="Umator.Contract.UI">
+      <HintPath>..\..\Libs\Shared\Umator.Contract.UI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
