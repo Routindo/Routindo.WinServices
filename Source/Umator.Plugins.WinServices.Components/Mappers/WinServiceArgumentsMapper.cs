@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Umator.Contract;
+using Umator.Contract.Services;
 using Umator.Plugins.WinServices.Components.ControlServiceAction;
 using Umator.Plugins.WinServices.Components.ServiceWatcher;
 
@@ -10,6 +11,8 @@ namespace Umator.Plugins.WinServices.Components.Mappers
     public class WinServiceArgumentsMapper: IArgumentsMapper
     {
         public string Id { get; set; }
+        public ILoggingService LoggingService { get; set; }
+
         public ArgumentCollection Map(ArgumentCollection arguments)
         {
             if (!arguments.HasArgument(WinServiceWatcherResultArgs.ServiceName) ||

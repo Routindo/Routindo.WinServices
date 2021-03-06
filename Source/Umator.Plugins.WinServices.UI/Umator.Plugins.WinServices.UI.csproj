@@ -15,10 +15,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
-    <PackageReference Include="NLog" Version="4.7.6">
-      <IncludeAssets>all</IncludeAssets>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="5.0.0" />
   </ItemGroup>
 

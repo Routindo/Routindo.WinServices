@@ -14,13 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="4.7.6">
-      <IncludeAssets>all</IncludeAssets>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Umator.Plugins.WinServices.Components\Umator.Plugins.WinServices.Components.csproj" />
     <ProjectReference Include="..\Umator.Plugins.WinServices.UI\Umator.Plugins.WinServices.UI.csproj" />
   </ItemGroup>

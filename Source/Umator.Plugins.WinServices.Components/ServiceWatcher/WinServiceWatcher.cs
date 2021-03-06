@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ServiceProcess;
-using NLog;
 using Umator.Contract;
+using Umator.Contract.Services;
 
 namespace Umator.Plugins.WinServices.Components.ServiceWatcher
 {
@@ -12,9 +12,9 @@ namespace Umator.Plugins.WinServices.Components.ServiceWatcher
     public class WinServiceWatcher: IWatcher
     {
         public const string ComponentUniqueId = "7C211B6E-02E6-4979-AABE-909B770AAA4D";
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public string Id { get; set; }
+        public ILoggingService LoggingService { get; set; }
 
         [Argument(WinServiceWatcherInstanceArgs.ServiceName)] public string ServiceName { get; set; }
         [Argument(WinServiceWatcherInstanceArgs.WatchStatus)] public int Status { get; set; }
@@ -53,7 +53,7 @@ namespace Umator.Plugins.WinServices.Components.ServiceWatcher
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                LoggingService.Error(exception);
                 return WatcherResult.NotFound
                     .WithException(exception);
             }

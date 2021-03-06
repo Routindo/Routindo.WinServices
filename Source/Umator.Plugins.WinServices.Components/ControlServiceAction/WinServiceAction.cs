@@ -1,6 +1,6 @@
 ﻿using System;
-using NLog;
 using Umator.Contract;
+using Umator.Contract.Services;
 
 namespace Umator.Plugins.WinServices.Components.ControlServiceAction
 {
@@ -10,9 +10,9 @@ namespace Umator.Plugins.WinServices.Components.ControlServiceAction
     public class WinServiceAction: IAction
     {
         public const string ComponentUniqueId = "2F47FC7B-8170-4DE8-B953-41ED950380C1";
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
 
         public string Id { get; set; }
+        public ILoggingService LoggingService { get; set; }
 
         [Argument(WinServiceActionInstanceArgs.ServiceName)] public string ServiceName { get; set; }
         [Argument(WinServiceActionInstanceArgs.Status)] public int Status { get; set; }
@@ -79,7 +79,7 @@ namespace Umator.Plugins.WinServices.Components.ControlServiceAction
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                LoggingService.Error(exception);
                 return ActionResult.Failed().WithException(exception);
             }
         }
