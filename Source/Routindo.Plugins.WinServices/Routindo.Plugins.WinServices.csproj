@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <SignAssembly>true</SignAssembly>
+
+    <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Routindo.Plugins.WinServices.Components\Routindo.Plugins.WinServices.Components.csproj" />
+    <ProjectReference Include="..\Routindo.Plugins.WinServices.UI\Routindo.Plugins.WinServices.UI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Routindo.Contract">
+      <HintPath>..\..\Libs\Shared\Routindo.Contract.dll</HintPath>
+	    <Private>false</Private>
+    </Reference>
+    <Reference Include="Routindo.Contract.UI">
+      <HintPath>..\..\Libs\Shared\Routindo.Contract.UI.dll</HintPath>
+	    <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="License.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
