@@ -8,5 +8,5 @@ using Routindo.Contract.Attributes;
     Author = "Routindo",
     AuthorUri = "https://routindo.com/windows-services-controller/",
     DocumentationUri = "https://routindo.com/docs/windows-services-controller/",
-    SupportUri = "https://routindo.com/support/forum/?view=forum&id=12"
+    SupportUri = "https://routindo.com/support/forum/?view=forum&id=8"
 )]
