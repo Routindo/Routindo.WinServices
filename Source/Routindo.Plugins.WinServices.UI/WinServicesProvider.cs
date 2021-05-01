@@ -30,7 +30,7 @@ namespace Routindo.Plugins.WinServices.UI
         {
             if (instance.services == null)
                 instance.services = ServiceController.GetServices()
-                    .Select(e => new WinServiceModel(e.ServiceName, e.DisplayName)).OrderBy(e=> e.DisplayName).ToList();
+                    .Select(e => new WinServiceModel(e.ServiceName.Trim(), e.DisplayName.Trim())).OrderBy(e=> e.DisplayName).ToList();
 
             return instance.services;
         }
