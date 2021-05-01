@@ -20,12 +20,7 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
         {
             var statuses = Enum.GetValues<ServiceControllerStatus>().ToList();
             this.Statuses = new ObservableCollection<ServiceControllerStatus>(statuses);
-            this.Services = new ObservableCollection<WinServiceModel>(GetServices());
-        }
-
-        public static List<WinServiceModel> GetServices()
-        {
-            return ServiceController.GetServices().Select(e => new WinServiceModel(e.ServiceName, e.DisplayName)).ToList();
+            this.Services = new ObservableCollection<WinServiceModel>(WinServicesProvider.GetServices());
         }
 
 
@@ -89,7 +84,7 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
                 string serviceName = arguments.GetValue<string>(WinServiceWatcherInstanceArgs.ServiceName);
                 if (!string.IsNullOrWhiteSpace(serviceName))
                 {
-                    SelectedService = GetServices().SingleOrDefault(e=> e.ServiceName == serviceName) ;
+                    SelectedService = WinServicesProvider.GetServices().SingleOrDefault(e=> e.ServiceName == serviceName) ;
                 }
             }
 

@@ -23,16 +23,11 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
         {
             var statuses = Enum.GetValues<ServiceTargetStatus>().ToList();
             this.Statuses = new ObservableCollection<ServiceTargetStatus>(statuses);
-            this.Services = new ObservableCollection<WinServiceModel>(GetServices());
+            this.Services = new ObservableCollection<WinServiceModel>(WinServicesProvider.GetServices());
             ResetSelectedServiceCommand = new RelayCommand(ResetSelectedService);
         }
 
         public ICommand ResetSelectedServiceCommand { get; }
-
-        public static List<WinServiceModel> GetServices()
-        {
-            return ServiceController.GetServices().Select(e => new WinServiceModel(e.ServiceName, e.DisplayName)).ToList();
-        }
 
         private void ResetSelectedService()
         {
@@ -106,7 +101,7 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
             {
                 var serviceName = arguments.GetValue<string>(WinServiceActionInstanceArgs.ServiceName);
                 if (!string.IsNullOrWhiteSpace(serviceName))
-                    SelectedService = GetServices().SingleOrDefault(e=> e.ServiceName == serviceName);
+                    SelectedService = WinServicesProvider.GetServices().SingleOrDefault(e=> e.ServiceName == serviceName);
             }
 
             if (arguments.HasArgument(WinServiceActionInstanceArgs.Wait))
