@@ -102,7 +102,7 @@
                 </Grid.ColumnDefinitions>
                 <Label Content="Windows Service" />
                 <ComboBox Grid.Column="1" ItemsSource="{Binding Path=Services}"
-                          SelectedItem="{Binding Path=ServiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
+                          SelectedItem="{Binding Path=SelectedService, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
                           Validation.ErrorTemplate="{StaticResource ErrorControlTemplate}"
                 />
                 <Button Grid.Column="2" Content="Reset" Command="{Binding Path=ResetSelectedServiceCommand}" />

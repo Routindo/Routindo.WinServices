@@ -22,29 +22,13 @@
 
     <UserControl.Resources>
         <ResourceDictionary>
-            <ControlTemplate x:Key="ErrorControlTemplate">
-
-                <Grid>
-                    <Ellipse Fill="Red" Opacity="0.8" Width="15" Height="15"
-                             HorizontalAlignment="Right" VerticalAlignment="Center" 
-                             Margin="0 5 15 5"
-                             ToolTip="{Binding Path=/ErrorContent}" >
-                        <Ellipse.Resources>
-                            <Style TargetType="ToolTip">
-                                <Setter Property="Foreground" Value="DarkRed"/>
-                                <Setter Property="Background" Value="LightPink"/>
-                                <Setter Property="BorderBrush" Value="DarkRed"/>
-                            </Style>
-                        </Ellipse.Resources>
-                    </Ellipse>
-                    <AdornedElementPlaceholder x:Name="placeholder" ToolTip="{Binding Path=/ErrorContent}">
-                        <Border BorderBrush="Red" BorderThickness="1" />
-                    </AdornedElementPlaceholder>
-                </Grid>
-
-            </ControlTemplate>
-
-            <converters:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles.xaml" />
+                <ResourceDictionary Source="../Templates.xaml" />
+                <ResourceDictionary>
+                    <converters:InvertBooleanConverter x:Key="InvertBooleanConverter"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -55,52 +39,6 @@
         </Grid.RowDefinitions>
         <TextBlock Text="Windows Service Watcher" FontSize="18" FontWeight="Bold" />
         <StackPanel Grid.Row="1" Grid.IsSharedSizeScope="True" Margin="10">
-            <StackPanel.Resources>
-                <Style TargetType="Button">
-                    <Setter Property="Margin" Value="5 0" />
-                    <Setter Property="Padding" Value="5" />
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="MinWidth" Value="95" />
-                </Style>
-                <Style TargetType="CheckBox">
-                    <Setter Property="VerticalAlignment"  Value="Center"/>
-                </Style>
-                <Style TargetType="RadioButton">
-                    <Setter Property="VerticalAlignment"  Value="Center"/>
-                    <Setter Property="Margin"  Value="5 0"/>
-                </Style>
-                <Style TargetType="ComboBox">
-                    <Setter Property="VerticalAlignment"  Value="Center"/>
-                    <Setter Property="Background"  Value="Transparent"/>
-                    <Setter Property="Margin"  Value="5 0"/>
-                    <Setter Property="Width"  Value="240"/>
-                    <Setter Property="Height"  Value="30"/>
-                </Style>
-                <Style TargetType="TextBox">
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="Padding" Value="1 5" />
-                </Style>
-                <Style TargetType="PasswordBox">
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="VerticalContentAlignment" Value="Center" />
-                    <Setter Property="Padding" Value="1 5" />
-                </Style>
-                <Style TargetType="Label">
-                    <Setter Property="FontWeight" Value="Bold" />
-                    <Setter Property="ContentStringFormat" Value="{}{0}:" />
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="HorizontalAlignment" Value="Right" />
-                    <Setter Property="Margin" Value="0 0 5 0" />
-                </Style>
-                <Style TargetType="Grid">
-                    <Setter Property="Margin" Value="0 10" />
-                </Style>
-                <Style TargetType="TextBlock">
-                    <Setter Property="VerticalAlignment" Value="Center" />
-                    <Setter Property="TextWrapping" Value="Wrap" />
-                    <!--<Setter Property="Margin" Value="5" />-->
-                </Style>
-            </StackPanel.Resources>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"   SharedSizeGroup="Label"  />
@@ -112,7 +50,7 @@
                        
                 />
                 <ComboBox Grid.Column="1" ItemsSource="{Binding Path=Services}"
-                          SelectedItem="{Binding Path=ServiceName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
+                          SelectedItem="{Binding Path=SelectedService, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"
                 Validation.ErrorTemplate="{StaticResource ErrorControlTemplate}"
                           />
                 <!--<Button Grid.Column="2" Content="Reset" />-->

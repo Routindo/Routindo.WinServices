@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
+using System.ServiceProcess;
 using System.Windows.Input;
-using Routindo.Contract;
 using Routindo.Contract.Arguments;
 using Routindo.Contract.UI;
 using Routindo.Plugins.WinServices.Components;
 using Routindo.Plugins.WinServices.Components.ControlServiceAction;
+using Routindo.Plugins.WinServices.UI.Models;
 
 namespace Routindo.Plugins.WinServices.UI.ViewModels
 {
@@ -16,33 +16,38 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
     {
         private bool _wait = true;
         private ServiceTargetStatus? _status;
-        private string _serviceName;
+        private WinServiceModel _selectedService;
         private int _waitTimeout = 10;
 
         public WinServiceActionConfiguratorViewModel()
         {
             var statuses = Enum.GetValues<ServiceTargetStatus>().ToList();
             this.Statuses = new ObservableCollection<ServiceTargetStatus>(statuses);
-            this.Services = new ObservableCollection<string>(WinServiceUtilities.GetServices());
+            this.Services = new ObservableCollection<WinServiceModel>(GetServices());
             ResetSelectedServiceCommand = new RelayCommand(ResetSelectedService);
         }
 
         public ICommand ResetSelectedServiceCommand { get; }
 
+        public static List<WinServiceModel> GetServices()
+        {
+            return ServiceController.GetServices().Select(e => new WinServiceModel(e.ServiceName, e.DisplayName)).ToList();
+        }
+
         private void ResetSelectedService()
         {
-            this.ServiceName = null;
+            this.SelectedService = null;
         }
 
         public ObservableCollection<ServiceTargetStatus> Statuses { get; set; }
-        public ObservableCollection<string> Services { get; set; }
+        public ObservableCollection<WinServiceModel> Services { get; set; }
 
-        public string ServiceName
+        public WinServiceModel SelectedService
         {
-            get => _serviceName;
+            get => _selectedService;
             set
             {
-                _serviceName = value;
+                _selectedService = value;
                 OnPropertyChanged();
             }
         }
@@ -86,7 +91,7 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
         public override void Configure()
         {
             this.InstanceArguments = ArgumentCollection.New()
-                .WithArgument(WinServiceActionInstanceArgs.ServiceName, ServiceName)
+                .WithArgument(WinServiceActionInstanceArgs.ServiceName, SelectedService?.ServiceName)
                 .WithArgument(WinServiceActionInstanceArgs.Status, (int)Status)
                 .WithArgument(WinServiceActionInstanceArgs.Wait, Wait)
                 .WithArgument(WinServiceActionInstanceArgs.WaitTimeout, WaitTimeout);
@@ -98,7 +103,11 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
                 return;
 
             if (arguments.HasArgument(WinServiceActionInstanceArgs.ServiceName))
-                ServiceName = arguments.GetValue<string>(WinServiceActionInstanceArgs.ServiceName);
+            {
+                var serviceName = arguments.GetValue<string>(WinServiceActionInstanceArgs.ServiceName);
+                if (!string.IsNullOrWhiteSpace(serviceName))
+                    SelectedService = GetServices().SingleOrDefault(e=> e.ServiceName == serviceName);
+            }
 
             if (arguments.HasArgument(WinServiceActionInstanceArgs.Wait))
                 Wait = arguments.GetValue<bool>(WinServiceActionInstanceArgs.Wait);

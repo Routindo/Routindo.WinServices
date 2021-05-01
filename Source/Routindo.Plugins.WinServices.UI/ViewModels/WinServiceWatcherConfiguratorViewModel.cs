@@ -1,21 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.ServiceProcess;
-using System.Windows.Input;
-using Routindo.Contract;
 using Routindo.Contract.Arguments;
 using Routindo.Contract.UI;
-using Routindo.Plugins.WinServices.Components;
 using Routindo.Plugins.WinServices.Components.ServiceWatcher;
+using Routindo.Plugins.WinServices.UI.Models;
 
 namespace Routindo.Plugins.WinServices.UI.ViewModels
 {
     public class WinServiceWatcherConfiguratorViewModel : PluginConfiguratorViewModelBase
     {
-        private string _serviceName;
+        private WinServiceModel _selectedService;
         private ServiceControllerStatus? _watchStatus;
         private bool _anyStatus = true;
 
@@ -23,18 +20,26 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
         {
             var statuses = Enum.GetValues<ServiceControllerStatus>().ToList();
             this.Statuses = new ObservableCollection<ServiceControllerStatus>(statuses);
-            this.Services = new ObservableCollection<string>(WinServiceUtilities.GetServices());
+            this.Services = new ObservableCollection<WinServiceModel>(GetServices());
         }
 
-        
-        public string ServiceName
+        public static List<WinServiceModel> GetServices()
         {
-            get => _serviceName;
+            return ServiceController.GetServices().Select(e => new WinServiceModel(e.ServiceName, e.DisplayName)).ToList();
+        }
+
+
+        public WinServiceModel SelectedService
+        {
+            get => _selectedService;
             set
             {
-                _serviceName = value;
+                _selectedService = value;
                 ClearPropertyErrors();
-                ValidateNonNullOrEmptyString(ServiceName);
+                if (_selectedService == null)
+                {
+                    AddPropertyError(nameof(SelectedService), "Mandatory Field");
+                }
                 OnPropertyChanged();
             }
         }
@@ -63,12 +68,12 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
         }
 
         public ObservableCollection<ServiceControllerStatus> Statuses { get; set; }
-        public ObservableCollection<string> Services { get; set; }
+        public ObservableCollection<WinServiceModel> Services { get; set; }
 
         public override void Configure()
         {
             this.InstanceArguments = ArgumentCollection.New()
-                .WithArgument(WinServiceWatcherInstanceArgs.ServiceName, ServiceName)
+                .WithArgument(WinServiceWatcherInstanceArgs.ServiceName, SelectedService?.ServiceName)
                 .WithArgument(WinServiceWatcherInstanceArgs.WatchAnyStatus, AnyStatus);
             if (WatchStatus.HasValue)
                 InstanceArguments.Add(WinServiceWatcherInstanceArgs.WatchStatus, (int) WatchStatus);
@@ -80,7 +85,13 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
                 return;
 
             if (arguments.HasArgument(WinServiceWatcherInstanceArgs.ServiceName))
-                ServiceName = arguments.GetValue<string>(WinServiceWatcherInstanceArgs.ServiceName);
+            {
+                string serviceName = arguments.GetValue<string>(WinServiceWatcherInstanceArgs.ServiceName);
+                if (!string.IsNullOrWhiteSpace(serviceName))
+                {
+                    SelectedService = GetServices().SingleOrDefault(e=> e.ServiceName == serviceName) ;
+                }
+            }
 
             if (arguments.HasArgument(WinServiceWatcherInstanceArgs.WatchAnyStatus))
                 AnyStatus = arguments.GetValue<bool>(WinServiceWatcherInstanceArgs.WatchAnyStatus);
@@ -108,9 +119,12 @@ namespace Routindo.Plugins.WinServices.UI.ViewModels
             base.ValidateProperties();
 
             // Service name
-            ClearPropertyErrors(nameof(ServiceName));
-            ValidateNonNullOrEmptyString(ServiceName, nameof(ServiceName));
-            OnPropertyChanged(nameof(ServiceName));
+            ClearPropertyErrors(nameof(SelectedService));
+            if (SelectedService == null)
+            {
+                AddPropertyError(nameof(SelectedService), "Mandatory Field");
+            }
+            OnPropertyChanged(nameof(SelectedService));
 
             // Watch Status
             ClearPropertyErrors(nameof(WatchStatus));
