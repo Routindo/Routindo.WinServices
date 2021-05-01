@@ -8,8 +8,8 @@ using Routindo.Plugins.WinServices.Components.ServiceWatcher;
 
 namespace Routindo.Plugins.WinServices.Components.Mappers
 {
-    [PluginItemInfo("39F74215-46D2-452E-9D0E-8AB6D5008C51", "Service Name Mapper",
-        "Map arguments of " + nameof(WinServiceWatcher) + "to arguments of " + nameof(ControlServiceAction))]
+    [PluginItemInfo("39F74215-46D2-452E-9D0E-8AB6D5008C51", nameof(WinServiceArgumentsMapper),
+        "Map arguments of " + nameof(WinServiceWatcher) + "to arguments of " + nameof(ControlServiceAction), Category = "Windows Services", FriendlyName = "Service Watcher / Action Arguments Mapper")]
     public class WinServiceArgumentsMapper: IArgumentsMapper
     {
         public string Id { get; set; }

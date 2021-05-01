@@ -8,8 +8,8 @@ using Routindo.Contract.Watchers;
 
 namespace Routindo.Plugins.WinServices.Components.ServiceWatcher
 {
-    [PluginItemInfo(ComponentUniqueId, "Windows Service Watcher",
-         "Watch a windows service status and notifies when Service is on a specific status"),
+    [PluginItemInfo(ComponentUniqueId, nameof(WinServiceWatcher),
+         "Watch a windows service status and notifies when Service is on a specific status", Category = "Windows Services", FriendlyName = "Monitor Service"),
      ResultArgumentsClass(typeof(WinServiceWatcherResultArgs))]
 
     public class WinServiceWatcher: IWatcher

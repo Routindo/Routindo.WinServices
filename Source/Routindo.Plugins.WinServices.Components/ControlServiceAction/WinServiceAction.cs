@@ -7,8 +7,8 @@ using Routindo.Contract.Services;
 
 namespace Routindo.Plugins.WinServices.Components.ControlServiceAction
 {
-    [PluginItemInfo(ComponentUniqueId, "Windows Service Action",
-         "Control The status of a Windows service"),
+    [PluginItemInfo(ComponentUniqueId, nameof(WinServiceAction),
+         "Control The status of a Windows service", Category = "Windows Services", FriendlyName = "Control Service"),
      ExecutionArgumentsClass(typeof(WinServiceActionExecutionArgs))]
     public class WinServiceAction: IAction
     {
