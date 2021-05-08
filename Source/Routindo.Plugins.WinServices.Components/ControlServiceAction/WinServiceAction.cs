@@ -10,6 +10,7 @@ namespace Routindo.Plugins.WinServices.Components.ControlServiceAction
     [PluginItemInfo(ComponentUniqueId, nameof(WinServiceAction),
          "Control The status of a Windows service", Category = "Windows Services", FriendlyName = "Control Service"),
      ExecutionArgumentsClass(typeof(WinServiceActionExecutionArgs))]
+    [ResultArgumentsClass(typeof(WinServiceActionResultsArgs))]
     public class WinServiceAction: IAction
     {
         public const string ComponentUniqueId = "2F47FC7B-8170-4DE8-B953-41ED950380C1";
@@ -26,10 +27,9 @@ namespace Routindo.Plugins.WinServices.Components.ControlServiceAction
 
         public ActionResult Execute(ArgumentCollection arguments)
         {
+            string serviceName = null;
             try
             {
-                string serviceName = null;
-
                 if (arguments.HasArgument(WinServiceActionExecutionArgs.ServiceName))
                     serviceName = arguments.GetValue<string>(WinServiceActionExecutionArgs.ServiceName);
 
@@ -78,12 +78,23 @@ namespace Routindo.Plugins.WinServices.Components.ControlServiceAction
                 }
 
 
-                return result ? ActionResult.Succeeded() : ActionResult.Failed();
+                return result
+                    ? ActionResult.Succeeded().WithAdditionInformation(ArgumentCollection.New()
+                        .WithArgument(WinServiceActionResultsArgs.ServiceName, serviceName)
+                        .WithArgument(WinServiceActionResultsArgs.ActionTargetStatus, Status)
+                    )
+                    : ActionResult.Failed().WithAdditionInformation(ArgumentCollection.New()
+                        .WithArgument(WinServiceActionResultsArgs.ServiceName, serviceName)
+                        .WithArgument(WinServiceActionResultsArgs.ActionTargetStatus, Status)
+                    );
             }
             catch (Exception exception)
             {
                 LoggingService.Error(exception);
-                return ActionResult.Failed().WithException(exception);
+                return ActionResult.Failed(exception).WithAdditionInformation(ArgumentCollection.New()
+                    .WithArgument(WinServiceActionResultsArgs.ServiceName, serviceName)
+                    .WithArgument(WinServiceActionResultsArgs.ActionTargetStatus, Status)
+                );
             }
         }
 
